@@ -1,24 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { Eventcalendar, getJson, toast } from "@mobiscroll/react";
+import "@mobiscroll/react/dist/css/mobiscroll.react.min.css";
 
 function App() {
+  const [myEvents, setEvents] = React.useState([]);
+
+  React.useEffect(() => {
+    getJson(
+      "https://trial.mobiscroll.com/events/?vers=5",
+      (events) => {
+        setEvents(events);
+      },
+      "jsonp"
+    );
+  }, []);
+  const onEventClick = React.useCallback((event) => {
+    toast({ message: event.event.title });
+  }, []);
+
+  const view = React.useMemo(() => {
+    return {
+      calendar: { type: "month" },
+      agenda: { type: "month" },
+    };
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Eventcalendar
+        theme=" windows-dark"
+        themeVariant="dark"
+        clickToCreate={false}
+        dragToCreate={false}
+        dragToMove={false}
+        dragToResize={false}
+        eventDelete={false}
+        data={myEvents}
+        // data={stuff}
+        // view={view}
+        onEventClick={onEventClick}
+      />
+    </>
   );
 }
 
