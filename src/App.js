@@ -1,7 +1,13 @@
 import React from "react";
-import { Eventcalendar, getJson, toast } from "@mobiscroll/react";
+import {
+  Eventcalendar,
+  Datepicker,
+  getJson,
+  toast,
+  createCustomTheme,
+} from "@mobiscroll/react";
 import "@mobiscroll/react/dist/css/mobiscroll.react.min.css";
-
+createCustomTheme("kin-mobiscroll-theme", "windows", false);
 function App() {
   const [myEvents, setEvents] = React.useState([]);
 
@@ -25,20 +31,35 @@ function App() {
     };
   }, []);
 
+  const [birthday, setBirthday] = React.useState(null);
+  const onBirthdayChange = (ev) => {
+    setBirthday(ev.value);
+  };
+
   return (
     <>
       <Eventcalendar
-        theme=" windows-dark"
-        themeVariant="dark"
+        theme="windows"
+        themeVariant="light"
         clickToCreate={false}
         dragToCreate={false}
         dragToMove={false}
         dragToResize={false}
         eventDelete={false}
         data={myEvents}
-        // data={stuff}
-        // view={view}
         onEventClick={onEventClick}
+      />
+      <Datepicker
+        value={birthday}
+        onChange={onBirthdayChange}
+        label="When were you born?"
+      />
+      <Datepicker
+        // theme="ios"
+        themeVariant="light"
+        value={birthday}
+        onChange={onBirthdayChange}
+        label="When were you born?"
       />
     </>
   );
